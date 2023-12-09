@@ -1,0 +1,3 @@
+g++ -o nameoffile nameoffile.cpp
+
+./nameoffile.exe

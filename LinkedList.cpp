@@ -24,7 +24,7 @@ void insertAtBeginning(Node*& head, string name) {
 
 void insertAtBeginningD(DNode*& head, string name){
     DNode* newNode = new DNode;
-    newNode->studentName = name;
+    newNode->studentName = name;                                                                               
     newNode->next = head;
     if(head == nullptr){
         head = newNode;
@@ -69,33 +69,19 @@ void insertAtEndD(DNode*& head, string name) {
 }
 
 
-// void insertAtMiddle(Node*& head, string name, string newName) {
-//     Node* newNode = new Node;
-//     newNode->studentName = newName;
-
-//     if (head == nullptr) {
-//         head = newNode;
-//         return;
-//     }
-
-//     Node* current = head;
-
-//     while (current != nullptr) {
-//         if(current->studentName == name) {
-//             newNode->next = current->next;
-//             current->next = newNode;
-//             return;
-//         }
-//         current = current->next;
-//     }
-
-//     cout << "Node with name " << name << " not found!\n";
-// }
-
 
 void insertAtMiddle(Node*& head, string name, int place){
     Node* current = head;
-    for(int i=1; i<place-1; i++){
+    for(int i=1; i<place-1; i++){  
+        if(current->next==nullptr){
+            cout<<"End of node reached at index "<< i;
+            cout<<" Node added at end";
+            // insertAtEnd(head, name);
+            Node* newNode = new Node;
+            newNode->studentName = name;
+            current->next = newNode;
+            return;
+        }
         current = current->next;
     }
     Node* newNode = new Node;
@@ -141,9 +127,34 @@ void deleteFromFirstD(DNode*& head){
     delete newNode;
 }
 
-void deleteFromMiddle(Node*& head, string name){
-    Node* current = new Node;
+// void deleteFromMiddle(Node*& head, string name){
+//     Node* current = new Node;
+//     while (current != nullptr && current->studentName != name) {
+//         current = current->next;
+//     }
+
+//     if (current == nullptr) {
+//         cout << "Node with name " << name << " not found!\n";
+//         return;
+//     }
+
+//     if(current->next != nullptr){
+
+//     }
+
+// }
+
+void deleteFromMiddle(Node*& head,string name) {
+    if (head == nullptr) {
+        cout << "Empty list. Cannot delete.\n";
+        return;
+    }
+
+    Node* current = head;
+    Node* previous = nullptr;
+
     while (current != nullptr && current->studentName != name) {
+        previous = current;
         current = current->next;
     }
 
@@ -152,10 +163,14 @@ void deleteFromMiddle(Node*& head, string name){
         return;
     }
 
-    if(current->next != nullptr){
-
+    // If the node to be deleted is the head
+    if (previous == nullptr) {
+        head = current->next;
+    } else {
+        previous->next = current->next;
     }
 
+    delete current;
 }
 
 void deleteFromMiddleD(DNode*& head, string name){
@@ -210,25 +225,35 @@ void displayFromFirstD(DNode* head){
 }
 
 void displayFromLast(Node* head){
-    if (head == nullptr) {
-        cout << "Empty List!";
-    } else {
-        Node* current = head;
-        Node* end = head;
-        
-        //To get to the end of the LL
-        while(end->next!= nullptr){
-            if(end->next->next == nullptr){
-                current = end;
-            }
-            end = end->next;
-        }
-
-
-        while(current->studentName!= end->studentName){
-
-        }
+    if (head == NULL) {
+        cout << "List is empty!" << endl;
+        return;
     }
+
+    if (head->next != NULL) {
+        displayFromLast(head->next);
+    }
+    cout << head->studentName << " -> ";
+
+    // if (head == nullptr) {
+    //     cout << "Empty List!";
+    // } else {
+    //     Node* current = head;
+    //     Node* end = head;
+        
+    //     //To get to the end of the LL
+    //     while(end->next!= nullptr){
+    //         if(end->next->next == nullptr){
+    //             current = end;
+    //         }
+    //         end = end->next;
+    //     }
+
+
+    //     while(current->studentName!= end->studentName){
+
+    //     }
+    // }
 }
 
 void displayFromLastD(DNode* head){
@@ -248,6 +273,21 @@ void displayFromLastD(DNode* head){
 }
 
 
+void searchSingle(Node*& head, string name){
+    int position = 0;
+    Node* current = head;
+    while(current->next!= nullptr){
+        
+        if(current->studentName ==  name){
+            cout<<name<< " found at index "<< position;
+            return;
+        }
+        current = current->next;
+        position++;
+    }
+
+    cout << name <<" not found!";
+}
 
 
 void showMenu() {
@@ -258,7 +298,8 @@ void showMenu() {
     cout << "\t\t\t 5. Delete the middle node\n";
     cout << "\t\t\t 6. Display from first to last\n";
     cout << "\t\t\t 7. Display from last to first\n";
-    cout << "\t\t\t 8. Back to the main menu\n";
+    cout << "\t\t\t 8. Search for Student's name\n";
+    cout << "\t\t\t 9. Back to the main menu\n";
     cout << "\n Enter Your Choice: ";
 }
 
@@ -312,19 +353,28 @@ int main() {
                         case 4:
                             deleteFromFirst(head);
                             break;
+                        case 5:
+                            deleteFromMiddle(head, inputName());
+                            break;
                         case 6:
                             displayFromFirst(head);
+                            break;
+                        case 7:
+                            displayFromLast(head);
+                            break;
+                        case 8:
+                            searchSingle(head, inputName());
                             break;
                         // Add other cases for singly linked list operations here
                     }
 
-                    if (singlyChoice != 8) {
+                    if (singlyChoice != 9) {
                         cout << "\nPress Enter to continue...";
                         cin.ignore();
                         cin.get();
                     }
 
-                } while (singlyChoice != 8);
+                } while (singlyChoice != 9);
                 break;
             }
 
